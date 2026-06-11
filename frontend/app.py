@@ -300,6 +300,12 @@ def main():
                 if selected_city_id != st.session_state.city_id:
                     st.session_state.city_id = selected_city_id
                     st.rerun()
+
+            st.markdown("<br>", unsafe_allow_html=True)
+            if st.button("🔄 Önbelleği (Cache) Temizle", use_container_width=True):
+                fetch_cities.clear()
+                fetch_places.clear()
+                st.rerun()
                     
         import streamlit.components.v1 as components
         components.html("""
