@@ -92,7 +92,7 @@ def fetch_cities(locale: str = "tr") -> list:
     try:
         r = requests.get(
             f"{STRAPI_URL}/api/cities?locale={locale}&populate=*",
-            headers=HEADERS, timeout=8
+            timeout=8
         )
         return r.json().get("data", []) if r.ok else []
     except Exception:
@@ -107,7 +107,7 @@ def fetch_places(city_doc_id: str, locale: str = "tr") -> list:
             f"&filters[city][documentId][$eq]={city_doc_id}"
             f"&populate=CoverImage"
         )
-        r = requests.get(url, headers=HEADERS, timeout=8)
+        r = requests.get(url, timeout=8)
         return r.json().get("data", []) if r.ok else []
     except Exception:
         return []

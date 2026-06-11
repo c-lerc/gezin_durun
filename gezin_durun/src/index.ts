@@ -103,6 +103,24 @@ export default {
       } catch (e) {
         console.log('Error publishing drafts:', e.message);
       }
+      // 4. Grant Public Read Permissions
+      try {
+        const publicRole = await strapi.db.query('plugin::users-permissions.role').findOne({ where: { type: 'public' } });
+        if (publicRole) {
+          const actions = ['api::city.city.find', 'api::place.place.find'];
+          for (const action of actions) {
+            const existing = await strapi.db.query('plugin::users-permissions.permission').findOne({ where: { action, role: publicRole.id }});
+            if (!existing) {
+              await strapi.db.query('plugin::users-permissions.permission').create({
+                data: { action, role: publicRole.id }
+              });
+            }
+          }
+          console.log('Granted public read access to cities and places.');
+        }
+      } catch (e) {
+        console.log('Error granting public access:', e.message);
+      }
     } catch (error) {
       console.error('Error during bootstrap:', error);
     }
