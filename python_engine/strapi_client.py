@@ -24,7 +24,6 @@ def upload_image_to_strapi(filepath):
     try:
         with open(filepath, 'rb') as f:
             files = {'files': (os.path.basename(filepath), f, 'image/jpeg')}
-            # No content-type header for multipart/form-data, requests handles it
             response = requests.post(url, headers={"Authorization": HEADERS["Authorization"]}, files=files)
             
         if response.status_code in [200, 201]:
@@ -49,7 +48,7 @@ def create_city(name_tr, country_tr, shortinfo_tr, name_en, country_en, shortinf
     city_id_tr = None
     city_id_en = None
     
-    # 1. Create TR (default)
+
     payload_tr = {"data": {"Name": name_tr, "Country": country_tr, "ShortInfo": shortinfo_tr, "publishedAt": "2024-01-01T00:00:00.000Z"}}
     try:
         response = requests.post(url, headers=HEADERS, json=payload_tr)
@@ -61,7 +60,7 @@ def create_city(name_tr, country_tr, shortinfo_tr, name_en, country_en, shortinf
     except Exception as e:
         print(f"Error creating TR city: {e}")
         
-    # 2. Create EN
+
     payload_en = {"data": {"Name": name_en, "Country": country_en, "ShortInfo": shortinfo_en, "publishedAt": "2024-01-01T00:00:00.000Z"}}
     try:
         loc_response = requests.post(f"{url}?locale=en", headers=HEADERS, json=payload_en)
@@ -81,7 +80,7 @@ def create_place(name_tr, description_tr, rating, city_id_tr, city_id_en, media_
     """
     url = f"{STRAPI_URL}/api/places"
     
-    # 1. Create TR
+
     if city_id_tr:
         payload_tr = {"data": {"Name": name_tr, "Description": description_tr, "Rating": rating, "city": city_id_tr, "publishedAt": "2024-01-01T00:00:00.000Z"}}
         if media_id: payload_tr["data"]["CoverImage"] = media_id
@@ -95,7 +94,7 @@ def create_place(name_tr, description_tr, rating, city_id_tr, city_id_en, media_
         except Exception as e:
             print(f"Error creating TR place: {e}")
             
-    # 2. Create EN
+
     if city_id_en:
         payload_en = {"data": {"Name": name_en, "Description": description_en, "Rating": rating, "city": city_id_en, "publishedAt": "2024-01-01T00:00:00.000Z"}}
         if media_id: payload_en["data"]["CoverImage"] = media_id

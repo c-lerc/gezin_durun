@@ -8,9 +8,6 @@ def scrape_travel_data():
     Returns a list of cities and their places.
     """
     print("Scraping sample data...")
-    # For demonstration, we will use hardcoded sample data and scrape translations/enrichments 
-    # since scraping a random travel site might fail due to structure changes.
-    # We will simulate the "scraping" process by having base data and translating it.
     
     cities_data = [
         {
