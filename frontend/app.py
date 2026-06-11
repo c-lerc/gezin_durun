@@ -5,7 +5,9 @@ from dotenv import load_dotenv
 import textwrap
 
 # ─── ENV & CONFIG ───────────────────────────────────────────────────────────────
-load_dotenv()
+dotenv_path = os.path.join(os.path.dirname(__file__), '..', 'python_engine', '.env')
+load_dotenv(dotenv_path)
+
 STRAPI_URL   = os.getenv("STRAPI_URL", "http://localhost:1337")
 API_TOKEN    = os.getenv("STRAPI_API_TOKEN", "")
 HEADERS      = {"Authorization": f"Bearer {API_TOKEN}"}
