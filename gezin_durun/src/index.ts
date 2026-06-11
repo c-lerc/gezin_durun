@@ -89,6 +89,20 @@ export default {
           console.log('PythonEngineToken already exists.');
         }
       }
+      // 3. Force-publish all cities and places
+      try {
+        await strapi.db.query('api::city.city').updateMany({
+          where: { publishedAt: null },
+          data: { publishedAt: new Date() }
+        });
+        await strapi.db.query('api::place.place').updateMany({
+          where: { publishedAt: null },
+          data: { publishedAt: new Date() }
+        });
+        console.log('Force published all draft cities and places.');
+      } catch (e) {
+        console.log('Error publishing drafts:', e.message);
+      }
     } catch (error) {
       console.error('Error during bootstrap:', error);
     }
