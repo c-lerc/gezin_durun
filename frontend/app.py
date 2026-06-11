@@ -235,6 +235,30 @@ def main():
         return list(d.values())
 
     init_cities = deduplicate(fetch_cities("tr"))
+    
+    # --- AUTO-LOADER LOGIC ---
+    if not init_cities:
+        import subprocess
+        import sys
+        import time
+        with st.spinner("Sunucu yeni uyandı, veritabanı boş görünüyor. Gezi verileri sizin için otomatik olarak internetten çekiliyor, lütfen 20-30 saniye bekleyin... 🚀"):
+            try:
+                env = os.environ.copy()
+                env["STRAPI_URL"] = STRAPI_URL
+                env["STRAPI_API_TOKEN"] = API_TOKEN
+                
+                script_dir = os.path.join(os.path.dirname(__file__), '..', 'python_engine')
+                subprocess.run([sys.executable, "main.py"], cwd=script_dir, env=env, check=True)
+                
+                # Clear streamlit cache so it fetches the new data
+                time.sleep(2)
+                fetch_cities.clear()
+                fetch_places.clear()
+                init_cities = deduplicate(fetch_cities("tr"))
+            except Exception as e:
+                st.error(f"Otomatik veri yükleme sırasında bir hata oluştu: {e}")
+    # -------------------------
+
     en_cities   = deduplicate(fetch_cities("en"))
 
     # Layout: Split Screen
