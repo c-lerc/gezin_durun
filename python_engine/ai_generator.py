@@ -3,10 +3,7 @@ import urllib.parse
 import os
 
 def generate_image_for_place(place_name_en, city_name_en, output_dir="temp_images"):
-    """
-    Generates an image for the given place using Pollinations API and saves it locally.
-    Returns the local file path.
-    """
+    
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
@@ -20,7 +17,6 @@ def generate_image_for_place(place_name_en, city_name_en, output_dir="temp_image
     
     print(f"Generating image for {place_name_en}...")
     try:
-        # Picsum is highly reliable and does not block python-requests
         response = requests.get(url, stream=True, allow_redirects=True)
         if response.status_code == 200:
             with open(filepath, 'wb') as f:
